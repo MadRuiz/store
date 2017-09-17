@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 10-09-2017 a las 19:39:54
+-- Tiempo de generación: 17-09-2017 a las 14:23:42
 -- Versión del servidor: 5.6.13
 -- Versión de PHP: 5.4.17
 
@@ -17,10 +17,33 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `tiendaonline`
+-- Base de datos: `store`
 --
-CREATE DATABASE IF NOT EXISTS `tiendaonline` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `tiendaonline`;
+CREATE DATABASE IF NOT EXISTS `store` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `store`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `categorias`
+--
+
+CREATE TABLE IF NOT EXISTS `categorias` (
+  `idcategoria` int(10) NOT NULL AUTO_INCREMENT,
+  `categoria` varchar(50) NOT NULL,
+  PRIMARY KEY (`idcategoria`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`idcategoria`, `categoria`) VALUES
+(1, 'Mujer'),
+(2, 'Hombre'),
+(3, 'Niños y bebés'),
+(4, 'Ocasión'),
+(5, 'Otros');
 
 -- --------------------------------------------------------
 
@@ -41,13 +64,6 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   PRIMARY KEY (`idcliente`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
---
--- Volcado de datos para la tabla `clientes`
---
-
-INSERT INTO `clientes` (`idcliente`, `nombre`, `apellidos`, `email`, `usuario`, `clave`, `telefono`, `direccion`, `pais`) VALUES
-(4, 'mad', 'ruiz', 'sdasd@zcbznm', 'mad', 'mad', 1111111, 'sdfghnfdbsvacsxcvfbghjuyih', 'asdhsaj');
-
 -- --------------------------------------------------------
 
 --
@@ -64,25 +80,6 @@ CREATE TABLE IF NOT EXISTS `imagenesproducto` (
   KEY `idproducto` (`idproducto`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
---
--- Volcado de datos para la tabla `imagenesproducto`
---
-
-INSERT INTO `imagenesproducto` (`idimagen`, `idproducto`, `imagen`, `titulo`, `descripcion`) VALUES
-(1, 1, 'paraguas.jpg', 'Paraguas', 'Paraguas amarillo'),
-(2, 1, 'paraguas2.jpg', 'Paraguas en azul', 'es kúl (?)'),
-(3, 1, 'paraguas3.jpg', 'Paraguas en multicolor', 'Enceguece'),
-(6, 2, 'zapato1.jpg', 'Zapato kúl', 'vista lateral'),
-(7, 3, 'reloj1.jpg', 'Reloj azul de pared', 'Vista frontal'),
-(8, 4, 'balon1.jpg', 'Balón de vóley', 'dadfsf'),
-(9, 4, 'balon2.jpg', 'Balón de vóley', 'sdfsdf'),
-(10, 4, 'balon3.jpg', 'Balon', ' de voley?'),
-(11, 5, 'lapicero1.jpg', 'lapicero', 'para escribir'),
-(12, 5, 'lapicero2.jpg', 'lapicero', 'para escribir?'),
-(13, 5, 'lapicero3.jpg', 'lapicero', 'para escribir?'),
-(14, 5, 'lapicero4.jpg', 'lapicero', 'para escrbir?'),
-(15, 5, 'lapicero5.jpg', 'lapicero', 'para escribir?');
-
 -- --------------------------------------------------------
 
 --
@@ -97,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `lineaspedido` (
   PRIMARY KEY (`idlineas`),
   UNIQUE KEY `idpedido` (`idpedido`),
   KEY `idproducto` (`idproducto`,`unidades`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -114,13 +111,6 @@ CREATE TABLE IF NOT EXISTS `pedidos` (
   KEY `idcliente` (`idcliente`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
---
--- Volcado de datos para la tabla `pedidos`
---
-
-INSERT INTO `pedidos` (`idpedido`, `idcliente`, `fecha`, `estado`) VALUES
-(1, 4, '0000-00-00', '1');
-
 -- --------------------------------------------------------
 
 --
@@ -134,19 +124,52 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `precio` decimal(10,0) NOT NULL,
   `peso` double NOT NULL,
   `existencias` int(10) NOT NULL,
-  PRIMARY KEY (`idproducto`)
+  `idsubcategoria` int(10) NOT NULL,
+  PRIMARY KEY (`idproducto`),
+  KEY `idsubcategoria` (`idsubcategoria`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `productos`
+-- Estructura de tabla para la tabla `subcategorias`
 --
 
-INSERT INTO `productos` (`idproducto`, `nombreproducto`, `descripcion`, `precio`, `peso`, `existencias`) VALUES
-(1, 'Paraguas', 'Paraguas amarillo', '11', 2.13, 45),
-(2, 'Zapatos', 'Zapato de tacón', '35', 1, 46),
-(3, 'Reloj', 'Reloj de pared', '15', 5.4, 47),
-(4, 'Balon ', 'Pelota?', '40', 4.3, 4),
-(5, 'Boligrafo', 'Lapicero?', '5', 1, 15);
+CREATE TABLE IF NOT EXISTS `subcategorias` (
+  `idsubcategoria` int(10) NOT NULL AUTO_INCREMENT,
+  `idcategoria` int(10) NOT NULL,
+  `subcategoria` varchar(50) NOT NULL,
+  PRIMARY KEY (`idsubcategoria`),
+  KEY `idcategoria` (`idcategoria`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
+
+--
+-- Volcado de datos para la tabla `subcategorias`
+--
+
+INSERT INTO `subcategorias` (`idsubcategoria`, `idcategoria`, `subcategoria`) VALUES
+(1, 1, 'Bolsa de asa'),
+(2, 1, 'Bolsa de cosméticos'),
+(3, 1, 'Clutchs'),
+(4, 1, 'Carteras y monederos'),
+(5, 1, 'Bolsos crossbody'),
+(6, 2, 'Billetera'),
+(7, 2, 'Casual'),
+(8, 2, 'Cangurera'),
+(9, 2, 'Monederos'),
+(10, 3, 'Escolares'),
+(11, 3, 'Monederos y carteras'),
+(12, 3, 'Crossbody'),
+(13, 3, 'Mochilas'),
+(14, 3, 'Loncheras'),
+(15, 4, 'Deporte'),
+(16, 4, 'Fiestas'),
+(17, 4, 'Playa'),
+(18, 4, 'Viaje'),
+(19, 4, 'Negocios'),
+(20, 5, 'Mochilas'),
+(21, 5, 'Bolsas funcionales'),
+(22, 5, 'Accesorios');
 
 --
 -- Restricciones para tablas volcadas
@@ -170,6 +193,18 @@ ALTER TABLE `lineaspedido`
 --
 ALTER TABLE `pedidos`
   ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`idcliente`) REFERENCES `clientes` (`idcliente`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `productos`
+--
+ALTER TABLE `productos`
+  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`idsubcategoria`) REFERENCES `subcategorias` (`idsubcategoria`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `subcategorias`
+--
+ALTER TABLE `subcategorias`
+  ADD CONSTRAINT `subcategorias_ibfk_1` FOREIGN KEY (`idcategoria`) REFERENCES `categorias` (`idcategoria`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
